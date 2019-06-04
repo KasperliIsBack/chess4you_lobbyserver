@@ -25,17 +25,17 @@ public class LobbyHandler {
         return gson.toJson(lobbies);
     }
 
-    public String getLobby(UUID lobbyUuid) {
+    public String getLobby(UUID lobbyUuid) throws Exception {
         var lobby = lobbyService.getLobby(lobbyUuid);
         return gson.toJson(lobby);
     }
 
-    public String initLobby(String lobbyName, String playerName, int chooseColor) {
+    public String initLobby(String lobbyName, String playerName, int chooseColor) throws Exception {
         var url = lobbyService.initLobby(lobbyName, playerName, chooseColor);
         return url.toString();
     }
 
-    public String joinLobby(UUID lobbyUuid, String playerName) {
+    public String joinLobby(UUID lobbyUuid, String playerName) throws Exception {
         var url = lobbyService.joinLobby(lobbyUuid, playerName);
         return url.toString();
     }

@@ -2,6 +2,7 @@ package com.chess4you.lobbyserver.service;
 
 import com.chess4you.lobbyserver.data.Color;
 import com.chess4you.lobbyserver.data.Lobby;
+import com.chess4you.lobbyserver.exceptionHandling.exception.*;
 import com.squareup.okhttp.HttpUrl;
 import lombok.var;
 import org.springframework.stereotype.Service;
@@ -26,13 +27,16 @@ public class LobbyService {
         return lobbies.stream().toArray(element -> new Lobby[element]);
     }
 
-    public Lobby getLobby(UUID lobbyUuid) {
-        // TODO Exception
+    public Lobby getLobby(UUID lobbyUuid) throws Exception {
         var lobby = lobbyDictionary.get(lobbyUuid);
-        return lobby;
+        if(lobby != null) {
+            return lobby;
+        } else {
+            throw new LobbyDoesNotExistsException(lobbyUuid.toString());
+        }
     }
 
-    public URL initLobby(String lobbyName, String playerName, int chooseColor) {
+    public URL initLobby(String lobbyName, String playerName, int chooseColor) throws Exception {
         if(gameService.isGameServerAvailable()) {
             if(!lobbyExists(lobbyName)) {
                 var gameServer = gameService.getAvailableGameServer();
@@ -46,19 +50,17 @@ public class LobbyService {
                         .url();
                 return url;
             } else {
-                // TODO Exception Lobby Exists
-                return null;
+                throw new LobbyDoesNotExistsException(lobbyName);
             }
         } else {
-            // TODO Exception No available Game Server
-            return null;
+            throw new NoServerAvailableException();
         }
     }
 
-    public URL joinLobby(UUID lobbyUuid, String playerName) {
+    public URL joinLobby(UUID lobbyUuid, String playerName) throws Exception {
         if(gameService.isGameServerAvailable()) {
             if(lobbyExists(lobbyUuid)) {
-                if(lobbyIsFree(lobbyUuid)) {
+                if(lobbyIsNotFull(lobbyUuid)) {
                     if(playerNotAlreadyInLobby(lobbyUuid, playerName)) {
                         var gameServer = gameService.getAvailableGameServer();
                         var lobby = updateLobby(lobbyUuid, playerName);
@@ -71,20 +73,16 @@ public class LobbyService {
                                 .url();
                         return url;
                     } else {
-                        // TODO Exception
-                        return null;
+                        throw new PlayerIsAlreadyInLobbyException(lobbyUuid, playerName);
                     }
                 } else {
-                    // TODO Exception
-                    return null;
+                    throw new LobbyIsFullException(lobbyUuid);
                 }
             }else {
-                // TODO Exception
-                return null;
+                throw new LobbyDoesNotExistsException(lobbyUuid.toString());
             }
         } else {
-            // TODO Exception
-            return null;
+            throw new NoServerAvailableException();
         }
     }
 
@@ -123,7 +121,7 @@ public class LobbyService {
         return lobby.getPlayerOne().getPlayerName() != playerName ? true : false;
     }
 
-    public boolean lobbyIsFree(UUID lobbyUuid) {
+    public boolean lobbyIsNotFull(UUID lobbyUuid) {
         var lobby = lobbyDictionary.get(lobbyUuid);
         return lobby.getPlayerTwo() == null ? true : false;
     }

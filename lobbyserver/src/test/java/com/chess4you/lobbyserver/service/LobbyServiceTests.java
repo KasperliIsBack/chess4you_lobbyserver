@@ -74,7 +74,7 @@ public class LobbyServiceTests {
         var url = lobbyService.joinLobby(UUID.fromString(tmpUrl.getQuery()), "Fabio");
         verify(gameService, times(2)).isGameServerAvailable();
         verify(lobbyService, times(1)).lobbyExists(any(UUID.class));
-        verify(lobbyService, times(1)).lobbyIsFree(any(UUID.class));
+        verify(lobbyService, times(1)).lobbyIsNotFull(any(UUID.class));
         verify(lobbyService, times(1)).playerNotAlreadyInLobby(any(UUID.class), anyString());
         verify(gameService, times(2)).getAvailableGameServer();
         verify(lobbyService, times(1)).updateLobby(any(UUID.class), anyString());
