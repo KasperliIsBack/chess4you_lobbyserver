@@ -4,36 +4,46 @@ node {
     }
     stage('gradle clean') {
         if(isUnix()) {
-            sh './lobbyserver/gradlew clean'
+            sh 'cd ./lobbyserver'
+            sh './gradlew clean'
         } else {
-            bat '/lobbyserver/gradlew.bat clean'
+            bat 'cd lobbyserver'
+            bat 'gradlew.bat clean'
         }
     }
     stage('gradle build') {
         if(isUnix()) {
-            sh './lobbyserver/gradlew build'
+            sh 'cd ./lobbyserver'
+            sh './gradlew build'
         } else {
+            bat 'cd lobbyserver'
             bat 'gradlew.bat build'
         }
     }
     stage('gradle run unit tests') {
         if(isUnix()) {
+            sh 'cd ./lobbyserver'
             sh './gradlew jacocoTestReport'
         } else {
+            bat 'cd lobbyserver'
             bat 'gradlew.bat jacocoTestReport'
         }
     }
     stage('gradle upload code coverage') {
         if(isUnix()) {
+            sh 'cd ./lobbyserver'
             sh './gradlew sonarqube'
         } else {
+            bat 'cd lobbyserver'
             bat 'gradlew.bat sonarqube'
         }
     }
     stage('gradle deploy war') {
         if(isUnix()) {
+            sh 'cd ./lobbyserver'
             sh './gradlew war'
         } else {
+            bat 'cd lobbyserver'
             bat 'gradlew.bat war'
         }
     }
