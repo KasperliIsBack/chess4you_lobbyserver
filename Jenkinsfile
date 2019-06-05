@@ -5,7 +5,7 @@ node {
     stage('gradle clean') {
         if(isUnix()) {
             sh 'cd ./lobbyserver'
-            sh './gradlew clean'
+            sh 'sh gradlew clean'
         } else {
             bat 'cd lobbyserver'
             bat 'gradlew.bat clean'
@@ -14,7 +14,7 @@ node {
     stage('gradle build') {
         if(isUnix()) {
             sh 'cd ./lobbyserver'
-            sh './gradlew build'
+            sh 'sh gradlew build'
         } else {
             bat 'cd lobbyserver'
             bat 'gradlew.bat build'
@@ -23,7 +23,7 @@ node {
     stage('gradle run unit tests') {
         if(isUnix()) {
             sh 'cd ./lobbyserver'
-            sh './gradlew jacocoTestReport'
+            sh 'sh gradlew jacocoTestReport'
         } else {
             bat 'cd lobbyserver'
             bat 'gradlew.bat jacocoTestReport'
@@ -32,7 +32,7 @@ node {
     stage('gradle upload code coverage') {
         if(isUnix()) {
             sh 'cd ./lobbyserver'
-            sh './gradlew sonarqube'
+            sh 'sh gradlew sonarqube'
         } else {
             bat 'cd lobbyserver'
             bat 'gradlew.bat sonarqube'
@@ -41,7 +41,7 @@ node {
     stage('gradle deploy war') {
         if(isUnix()) {
             sh 'cd ./lobbyserver'
-            sh './gradlew war'
+            sh 'sh gradlew war'
         } else {
             bat 'cd lobbyserver'
             bat 'gradlew.bat war'
