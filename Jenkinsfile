@@ -4,14 +4,14 @@ node {
     }
     stage('gradle clean') {
         if(isUnix()) {
-            sh './gradlew clean'
+            sh './lobbyserver/gradlew clean'
         } else {
-            bat 'gradlew.bat clean'
+            bat '/lobbyserver/gradlew.bat clean'
         }
     }
     stage('gradle build') {
         if(isUnix()) {
-            sh './gradlew build'
+            sh './lobbyserver/gradlew build'
         } else {
             bat 'gradlew.bat build'
         }
