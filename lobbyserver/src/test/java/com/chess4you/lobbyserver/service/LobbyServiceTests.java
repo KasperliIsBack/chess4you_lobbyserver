@@ -50,14 +50,14 @@ public class LobbyServiceTests {
 
     @Test
     @DisplayName("If it will return a existing Lobby")
-    public void TestGetLobby(){
+    public void TestGetLobby() throws Exception {
         var lobby = lobbyService.createLobby("Test", "Andri", 1);
         Assert.assertThat(lobbyService.getLobby(lobby.getUUIDLobby()), is(lobby));
     }
 
     @Test
     @DisplayName("If it will create a lobby if the lobby don't already exists")
-    public void TestInitLobby(){
+    public void TestInitLobby() throws Exception {
         var url = lobbyService.initLobby("Test", "Andri", 1);
 
         verify(gameService, times(1)).isGameServerAvailable();
@@ -69,7 +69,7 @@ public class LobbyServiceTests {
 
     @Test
     @DisplayName("If it will create a lobby if the lobby don't already exists")
-    public void TestJoinLobby(){
+    public void TestJoinLobby() throws Exception {
         var tmpUrl =  lobbyService.initLobby("Test", "Andri", 1);
         var url = lobbyService.joinLobby(UUID.fromString(tmpUrl.getQuery()), "Fabio");
         verify(gameService, times(2)).isGameServerAvailable();
