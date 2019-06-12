@@ -27,7 +27,7 @@ public class LobbyController {
     }
 
     @CrossOrigin(origins = "http://localhost:4200")
-    @GetMapping("/getAllLobbies")
+    @GetMapping("/getListLobbies")
     @ApiOperation("Return a List of all Lobbies")
     String getListLobby(){
         return lobbyHandler.getLobbies();

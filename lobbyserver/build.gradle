@@ -7,6 +7,7 @@ buildscript {
 		classpath 'org.springframework.boot:spring-boot-gradle-plugin:2.1.5.RELEASE'
 		classpath 'org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.7'
 		classpath 'org.jacoco:org.jacoco.core:0.8.3'
+		classpath 'gradle.plugin.com.palantir.gradle.docker:gradle-docker:0.22.1'
 	}
 }
 
@@ -20,7 +21,7 @@ apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
 apply plugin: 'org.sonarqube'
 apply plugin: 'jacoco'
-apply plugin: 'war'
+apply plugin: 'com.palantir.docker'
 
 group = 'com.chess4you'
 version = '0.0.1-SNAPSHOT'
@@ -47,8 +48,15 @@ test {
 	}
 }
 
-war {
-	enabled = true
+task unpack(type: Copy) {
+	dependsOn bootJar
+	from(zipTree(tasks.bootJar.outputs.files.singleFile))
+	into("build/dependency")
+}
+docker {
+	name "${project.group}/${bootJar.baseName}"
+	copySpec.from(tasks.unpack.outputs).into("dependency")
+	buildArgs(['DEPENDENCY': "dependency"])
 }
 
 dependencies {
