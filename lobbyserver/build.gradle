@@ -55,6 +55,7 @@ task unpack(type: Copy) {
 }
 docker {
 	name "${project.group}/${bootJar.baseName}"
+	tag "lobbyserver"
 	copySpec.from(tasks.unpack.outputs).into("dependency")
 	buildArgs(['DEPENDENCY': "dependency"])
 }
