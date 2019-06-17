@@ -1,6 +1,9 @@
 buildscript {
 	repositories {
 		mavenCentral()
+		maven{
+			url 'https://plugins.gradle.org/m2'
+		}
 	}
 	dependencies {
 		classpath 'io.spring.gradle:dependency-management-plugin:1.0.7.RELEASE'
@@ -55,7 +58,7 @@ task unpack(type: Copy) {
 }
 docker {
 	name "${project.group}/${bootJar.name}"
-	tag "lobbyserver", "${projec.group}/${bootJar.name}"
+	tag "lobbyserver", "${project.group}/${bootJar.name}"
 	copySpec.from(tasks.unpack.outputs).into("dependency")
 	buildArgs(['DEPENDENCY': "dependency"])
 }
