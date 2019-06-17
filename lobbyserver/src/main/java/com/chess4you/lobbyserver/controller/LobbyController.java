@@ -16,7 +16,7 @@ import java.util.UUID;
 
 @Slf4j
 @RestController
-@Api(description = "Controller for creating or retrieving Lobbies")
+@Api("Controller for creating or retrieving Lobbies")
 public class LobbyController {
 
     private LobbyHandler lobbyHandler;

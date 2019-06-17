@@ -20,7 +20,7 @@ public class SpringFoxConfig {
     public Docket apiDocket(){
         return new Docket(DocumentationType.SWAGGER_2)
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("server.controller"))
+                .apis(RequestHandlerSelectors.basePackage("com.chess4you.lobbyserver.controller"))
                 .paths(PathSelectors.any())
                 .build()
                 .apiInfo(getApiInfo());
