@@ -33,20 +33,26 @@ pipeline {
 
       }
     }
-    stage('gradle docker') {
+    stage('docker stop') {
+      steps {
+        sh 'docker stop $(docker ps -aqf "label=server=lobbyServer")'
+      }
+    }
+    stage('docker remove') {
+      steps {
+        sh 'docker rm $(docker ps -aqf "label=server=lobbyServer")'
+      }
+    }
+    stage('gradle docker build') {
       steps {
         dir(path: 'lobbyserver') {
           sh './gradlew build docker -x test'
+          sh 'docker ps -aqf "label=server=lobbyServer"'
         }
 
       }
     }
-    stage('docker remove old container') {
-      steps {
-        sh 'docker rm $(docker ps -aq --filter "server=lobbyserver")'
-      }
-    }
-    stage('docker run') {
+    stage('docker start') {
       steps {
         sh 'docker run -p 8082:8082 -t com.chess4you/lobbyserver'
       }
