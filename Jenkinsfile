@@ -52,9 +52,9 @@ pipeline {
 
       }
     }
-    stage('docker start') {
+    stage('docker run') {
       steps {
-        sh 'docker run -p 8082:8082 -t com.chess4you/lobbyserver'
+        sh 'docker run -d -p 8082:8082 -t com.chess4you/lobbyserver'
       }
     }
   }
