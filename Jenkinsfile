@@ -43,7 +43,7 @@ pipeline {
     }
     stage('docker remove old container') {
       steps {
-        sh 'docker rm $(docker ps -a -q --filter "tag=lobbyserver")'
+        sh 'docker rm $(docker ps -aq --filter "server=lobbyserver")'
       }
     }
     stage('docker run') {
