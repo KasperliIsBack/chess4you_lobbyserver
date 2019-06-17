@@ -35,27 +35,29 @@ pipeline {
     }
     stage('docker stop') {
       steps {
-        sh 'docker stop $(docker ps -aqf "label=server=lobbyServer")'
-      }
-    }
-    stage('docker remove') {
-      steps {
-        sh 'docker rm $(docker ps -aqf "label=server=lobbyServer")'
-      }
-    }
-    stage('gradle docker build') {
-      steps {
-        dir(path: 'lobbyserver') {
-          sh './gradlew build docker -x test'
-          sh 'docker ps -aqf "label=server=lobbyServer"'
+        sh '''if(docker ps -aqf "label=server=lobbyServer == "") {
+docker stop $(docker ps -aqf "label=server=lobbyServer")
+} '''
         }
-
       }
-    }
-    stage('docker start') {
-      steps {
-        sh 'docker run -p 8082:8082 -t com.chess4you/lobbyserver'
+      stage('docker remove') {
+        steps {
+          sh 'docker rm $(docker ps -aqf "label=server=lobbyServer")'
+        }
+      }
+      stage('gradle docker build') {
+        steps {
+          dir(path: 'lobbyserver') {
+            sh './gradlew build docker -x test'
+            sh 'docker ps -aqf "label=server=lobbyServer"'
+          }
+
+        }
+      }
+      stage('docker start') {
+        steps {
+          sh 'docker run -p 8082:8082 -t com.chess4you/lobbyserver'
+        }
       }
     }
   }
-}
