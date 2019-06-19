@@ -1,0 +1,11 @@
+package com.chess4you.lobbyserver.data;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+
+@Data
+@AllArgsConstructor
+public class ConnectionData {
+   private String lobbyUuid;
+   private String playerUuid;
+}

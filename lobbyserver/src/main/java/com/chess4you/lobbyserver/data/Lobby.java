@@ -1,5 +1,6 @@
 package com.chess4you.lobbyserver.data;
 
+import com.chess4you.lobbyserver.data.enums.Color;
 import lombok.Data;
 import lombok.NonNull;
 

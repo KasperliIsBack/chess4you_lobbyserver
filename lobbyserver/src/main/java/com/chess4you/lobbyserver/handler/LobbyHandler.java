@@ -1,5 +1,6 @@
 package com.chess4you.lobbyserver.handler;
 
+import com.chess4you.lobbyserver.data.ConnectionData;
 import com.chess4you.lobbyserver.data.Lobby;
 import com.chess4you.lobbyserver.service.LobbyService;
 import com.google.gson.Gson;
@@ -32,12 +33,12 @@ public class LobbyHandler {
     }
 
     public String initLobby(String lobbyName, String playerName, int chooseColor) throws Exception {
-        URL urlGameServer = lobbyService.initLobby(lobbyName, playerName, chooseColor);
+        ConnectionData urlGameServer = lobbyService.initLobby(lobbyName, playerName, chooseColor);
         return urlGameServer.toString();
     }
 
     public String joinLobby(UUID lobbyUuid, String playerName) throws Exception {
-        URL urlGameServer = lobbyService.joinLobby(lobbyUuid, playerName);
+        ConnectionData urlGameServer = lobbyService.joinLobby(lobbyUuid, playerName);
         return urlGameServer.toString();
     }
 }

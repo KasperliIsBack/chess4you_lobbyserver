@@ -1,4 +1,4 @@
-package com.chess4you.lobbyserver.data;
+package com.chess4you.lobbyserver.data.enums;
 
 public enum Color {
     Black, White;

@@ -1,6 +1,7 @@
 package com.chess4you.lobbyserver.service;
 
-import com.chess4you.lobbyserver.data.Color;
+import com.chess4you.lobbyserver.data.ConnectionData;
+import com.chess4you.lobbyserver.data.enums.Color;
 import com.chess4you.lobbyserver.data.Lobby;
 import com.chess4you.lobbyserver.exceptionHandling.exception.*;
 import com.squareup.okhttp.HttpUrl;
@@ -14,12 +15,14 @@ import java.util.*;
 public class LobbyService {
 
     private GameServerService gameServerService;
+    private GameDataService gameDataService;
     private PlayerService playerService;
     private Dictionary<UUID, Lobby> lobbyDictionary = new Hashtable<>();
 
-    public LobbyService(GameServerService gameService, PlayerService playerService) {
+    public LobbyService(GameServerService gameService, PlayerService playerService, GameDataService gameDataService) {
         this.gameServerService = gameService;
         this.playerService = playerService;
+        this.gameDataService = gameDataService;
     }
 
     public Lobby[] getAllLobbies() {
@@ -36,19 +39,12 @@ public class LobbyService {
         }
     }
 
-    public URL initLobby(String lobbyName, String playerName, int chooseColor) throws Exception {
+    public ConnectionData initLobby(String lobbyName, String playerName, int chooseColor) throws Exception {
         if(gameServerService.isGameServerAvailable()) {
             if(!lobbyExists(lobbyName)) {
                 var gameServer = gameServerService.getAvailableGameServer();
                 var lobby = createLobby(lobbyName, playerName, chooseColor);
-                URL url = new HttpUrl.Builder()
-                        .scheme("http")
-                        .host(gameServer.getHost())
-                        .port(gameServer.getPort())
-                        .query(lobby.getLobbyUuid().toString())
-                        .build()
-                        .url();
-                return url;
+                return new ConnectionData(lobby.getLobbyUuid().toString(), lobby.getPlayerOne().getPlayerUUID().toString());
             } else {
                 throw new LobbyDoesNotExistsException(lobbyName);
             }
@@ -57,21 +53,14 @@ public class LobbyService {
         }
     }
 
-    public URL joinLobby(UUID lobbyUuid, String playerName) throws Exception {
+    public ConnectionData joinLobby(UUID lobbyUuid, String playerName) throws Exception {
         if(gameServerService.isGameServerAvailable()) {
             if(lobbyExists(lobbyUuid)) {
                 if(lobbyIsNotFull(lobbyUuid)) {
                     if(playerNotAlreadyInLobby(lobbyUuid, playerName)) {
                         var gameServer = gameServerService.getAvailableGameServer();
                         var lobby = updateLobby(lobbyUuid, playerName);
-                        URL url = new HttpUrl.Builder()
-                                .scheme("http")
-                                .host(gameServer.getHost())
-                                .port(gameServer.getPort())
-                                .query(lobby.getLobbyUuid().toString())
-                                .build()
-                                .url();
-                        return url;
+                        return new ConnectionData(lobby.getLobbyUuid().toString(), lobby.getPlayerTwo().getPlayerUUID().toString());
                     } else {
                         throw new PlayerIsAlreadyInLobbyException(lobbyUuid, playerName);
                     }
@@ -100,6 +89,7 @@ public class LobbyService {
         lobby.setPlayerTwo(player);
         lobby.setColorPlayerTwo(Color.getOtherColor(lobby.getColorPlayerOne()));
         lobbyDictionary.put(lobby.getLobbyUuid(), lobby);
+        gameDataService.createGameData(lobby, true);
         return lobby;
     }
 

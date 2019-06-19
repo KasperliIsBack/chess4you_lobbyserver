@@ -1,6 +1,6 @@
 package com.chess4you.lobbyserver.service;
 
-import com.chess4you.lobbyserver.data.GameServer;
+import com.chess4you.lobbyserver.data.gamedata.GameServer;
 import com.chess4you.lobbyserver.repository.IGameServerRepository;
 import lombok.var;
 import org.junit.Assert;
