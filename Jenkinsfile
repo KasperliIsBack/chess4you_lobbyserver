@@ -28,7 +28,7 @@ pipeline {
     stage('gradle sonarqube') {
       steps {
         dir(path: 'lobbyserver') {
-          sh './gradlew sonarqube -Dsonar.projectKey=lobbyserver -Dsonar.organization=chess4you -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=f8b719179bf3f28f6b4292771d0f07cf97f682cc -Dsonar.coverage.jacoco.xmlReportPaths=C:\\git\\chess4you_lobbyserver\\lobbyserver\\build\\code_coverage\\reports\\jacocoXml\\jacocoXml.xml'
+          sh './gradlew -x test sonarqube -Dsonar.projectKey=lobbyserver -Dsonar.organization=chess4you -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=f8b719179bf3f28f6b4292771d0f07cf97f682cc -Dsonar.coverage.jacoco.xmlReportPaths=C:\\git\\chess4you_lobbyserver\\lobbyserver\\build\\code_coverage\\reports\\jacocoXml\\jacocoXml.xml'
         }
 
       }
