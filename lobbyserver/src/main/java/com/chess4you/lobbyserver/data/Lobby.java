@@ -7,10 +7,10 @@ import java.util.UUID;
 
 @Data
 public class Lobby {
-    @NonNull private UUID UUIDLobby;
-    @NonNull private String LobbyName;
-    @NonNull private Player PlayerOne;
-    @NonNull private Color ColorPlayerOne;
-    private Player PlayerTwo;
-    private Color ColorPlayerTwo;
+    @NonNull private UUID lobbyUuid;
+    @NonNull private String lobbyName;
+    @NonNull private Player playerOne;
+    @NonNull private Color colorPlayerOne;
+    private Player playerTwo;
+    private Color colorPlayerTwo;
 }

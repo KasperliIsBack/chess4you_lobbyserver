@@ -19,6 +19,7 @@ public class SpringFoxConfig {
     @Bean
     public Docket apiDocket(){
         return new Docket(DocumentationType.SWAGGER_2)
+                .host("http://172.16.1.198:8082")
                 .select()
                 .apis(RequestHandlerSelectors.basePackage("com.chess4you.lobbyserver.controller"))
                 .paths(PathSelectors.any())

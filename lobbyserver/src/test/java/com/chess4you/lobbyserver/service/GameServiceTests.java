@@ -1,7 +1,7 @@
 package com.chess4you.lobbyserver.service;
 
 import com.chess4you.lobbyserver.data.GameServer;
-import com.chess4you.lobbyserver.repository.IGameRepository;
+import com.chess4you.lobbyserver.repository.IGameServerRepository;
 import lombok.var;
 import org.junit.Assert;
 import org.junit.Before;
@@ -23,11 +23,11 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 @RunWith(MockitoJUnitRunner.class)
 public class GameServiceTests {
-    @Mock private IGameRepository gameRepositoryFull;
-    @Mock private IGameRepository gameRepositoryEmpty;
+    @Mock private IGameServerRepository gameRepositoryFull;
+    @Mock private IGameServerRepository gameRepositoryEmpty;
 
-    private GameService gameServiceFull;
-    private GameService gameServiceEmpty;
+    private GameServerService gameServiceFull;
+    private GameServerService gameServiceEmpty;
 
     @Before
     public void setMockOutput(){
@@ -39,8 +39,8 @@ public class GameServiceTests {
 
     @Before
     public void initService(){
-        gameServiceFull = new GameService(gameRepositoryFull);
-        gameServiceEmpty = new GameService(gameRepositoryEmpty);
+        gameServiceFull = new GameServerService(gameRepositoryFull);
+        gameServiceEmpty = new GameServerService(gameRepositoryEmpty);
     }
 
     @Test

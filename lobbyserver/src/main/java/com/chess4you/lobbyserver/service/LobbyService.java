@@ -13,12 +13,12 @@ import java.util.*;
 @Service
 public class LobbyService {
 
-    private GameService gameService;
+    private GameServerService gameServerService;
     private PlayerService playerService;
     private Dictionary<UUID, Lobby> lobbyDictionary = new Hashtable<>();
 
-    public LobbyService(GameService gameService, PlayerService playerService) {
-        this.gameService = gameService;
+    public LobbyService(GameServerService gameService, PlayerService playerService) {
+        this.gameServerService = gameService;
         this.playerService = playerService;
     }
 
@@ -37,15 +37,15 @@ public class LobbyService {
     }
 
     public URL initLobby(String lobbyName, String playerName, int chooseColor) throws Exception {
-        if(gameService.isGameServerAvailable()) {
+        if(gameServerService.isGameServerAvailable()) {
             if(!lobbyExists(lobbyName)) {
-                var gameServer = gameService.getAvailableGameServer();
+                var gameServer = gameServerService.getAvailableGameServer();
                 var lobby = createLobby(lobbyName, playerName, chooseColor);
                 URL url = new HttpUrl.Builder()
                         .scheme("http")
                         .host(gameServer.getHost())
                         .port(gameServer.getPort())
-                        .query(lobby.getUUIDLobby().toString())
+                        .query(lobby.getLobbyUuid().toString())
                         .build()
                         .url();
                 return url;
@@ -58,17 +58,17 @@ public class LobbyService {
     }
 
     public URL joinLobby(UUID lobbyUuid, String playerName) throws Exception {
-        if(gameService.isGameServerAvailable()) {
+        if(gameServerService.isGameServerAvailable()) {
             if(lobbyExists(lobbyUuid)) {
                 if(lobbyIsNotFull(lobbyUuid)) {
                     if(playerNotAlreadyInLobby(lobbyUuid, playerName)) {
-                        var gameServer = gameService.getAvailableGameServer();
+                        var gameServer = gameServerService.getAvailableGameServer();
                         var lobby = updateLobby(lobbyUuid, playerName);
                         URL url = new HttpUrl.Builder()
                                 .scheme("http")
                                 .host(gameServer.getHost())
                                 .port(gameServer.getPort())
-                                .query(lobby.getUUIDLobby().toString())
+                                .query(lobby.getLobbyUuid().toString())
                                 .build()
                                 .url();
                         return url;
@@ -90,7 +90,7 @@ public class LobbyService {
         var playerOne = playerService.createOrGetPlayer(playerName);
         var lobby = new Lobby(UUID.randomUUID(), lobbyName,
                 playerOne, Color.getColorById(chooseColor));
-        lobbyDictionary.put(lobby.getUUIDLobby(), lobby);
+        lobbyDictionary.put(lobby.getLobbyUuid(), lobby);
         return lobby;
     }
 
@@ -99,7 +99,7 @@ public class LobbyService {
         var lobby = lobbyDictionary.get(lobbyUuid);
         lobby.setPlayerTwo(player);
         lobby.setColorPlayerTwo(Color.getOtherColor(lobby.getColorPlayerOne()));
-        lobbyDictionary.put(lobby.getUUIDLobby(), lobby);
+        lobbyDictionary.put(lobby.getLobbyUuid(), lobby);
         return lobby;
     }
 

@@ -10,12 +10,12 @@ import java.util.*;
 @Service
 public class GameServerService {
     private Dictionary<UUID, GameServer> gameDictionary = new Hashtable<>();
-    private IGameServerRepository gameRepository;
+    private IGameServerRepository gameServerRepository;
 
     @Autowired
     public GameServerService(IGameServerRepository gameRepository) {
-        this.gameRepository = gameRepository;
-        for(GameServer game : this.gameRepository.findAll()) {
+        this.gameServerRepository = gameRepository;
+        for(GameServer game : this.gameServerRepository.findAll()) {
             gameDictionary.put(UUID.fromString(game.getUUIDGameServer()), game);
         }
     }

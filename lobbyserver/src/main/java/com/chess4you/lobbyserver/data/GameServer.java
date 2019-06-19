@@ -12,8 +12,8 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class GameServer {
     @Id
     private String UUIDGameServer;
-    @NonNull private String Name;
-    @NonNull private String Host;
-    @NonNull private int Port;
+    final private String Name;
+    final private String Host;
+    final private int Port;
     private Boolean IsRunning;
 }

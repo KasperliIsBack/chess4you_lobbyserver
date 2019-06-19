@@ -24,7 +24,7 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 @RunWith(MockitoJUnitRunner.class)
 public class LobbyServiceTests {
-    @Mock private GameService gameService;
+    @Mock private GameServerService gameService;
     @Mock private PlayerService playerService;
     private LobbyService lobbyService;
 
@@ -52,7 +52,7 @@ public class LobbyServiceTests {
     @DisplayName("If it will return a existing Lobby")
     public void TestGetLobby() throws Exception {
         var lobby = lobbyService.createLobby("Test", "Andri", 1);
-        Assert.assertThat(lobbyService.getLobby(lobby.getUUIDLobby()), is(lobby));
+        Assert.assertThat(lobbyService.getLobby(lobby.getLobbyUuid()), is(lobby));
     }
 
     @Test
