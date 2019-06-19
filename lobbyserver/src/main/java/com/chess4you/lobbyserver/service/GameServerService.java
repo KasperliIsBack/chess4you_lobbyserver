@@ -1,19 +1,19 @@
 package com.chess4you.lobbyserver.service;
 
 import com.chess4you.lobbyserver.data.GameServer;
-import com.chess4you.lobbyserver.repository.IGameRepository;
+import com.chess4you.lobbyserver.repository.IGameServerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
 
 @Service
-public class GameService {
+public class GameServerService {
     private Dictionary<UUID, GameServer> gameDictionary = new Hashtable<>();
-    private IGameRepository gameRepository;
+    private IGameServerRepository gameRepository;
 
     @Autowired
-    public GameService(IGameRepository gameRepository) {
+    public GameServerService(IGameServerRepository gameRepository) {
         this.gameRepository = gameRepository;
         for(GameServer game : this.gameRepository.findAll()) {
             gameDictionary.put(UUID.fromString(game.getUUIDGameServer()), game);
