@@ -83,7 +83,7 @@ public class LobbyServiceTests {
 
     private GameServer getTestGameServer() {
         var tmpGameServer = new GameServer("GameServerOne", "localhost", 8080);
-        tmpGameServer.setUUIDGameServer(UUID.randomUUID().toString());
+        tmpGameServer.setGameServerUuid(UUID.randomUUID().toString());
         tmpGameServer.setIsRunning(false);
         return tmpGameServer;
     }

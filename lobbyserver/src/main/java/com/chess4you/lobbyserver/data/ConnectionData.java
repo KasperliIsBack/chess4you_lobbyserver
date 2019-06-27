@@ -6,6 +6,7 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class ConnectionData {
-   private String lobbyUuid;
+   private String gameUuid;
+   private String gameDataUuid;
    private String playerUuid;
 }

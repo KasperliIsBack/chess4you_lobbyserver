@@ -1,14 +1,13 @@
 package com.chess4you.lobbyserver.service;
 
 import com.chess4you.lobbyserver.data.ConnectionData;
+import com.chess4you.lobbyserver.data.Player;
 import com.chess4you.lobbyserver.data.enums.Color;
 import com.chess4you.lobbyserver.data.Lobby;
 import com.chess4you.lobbyserver.exceptionHandling.exception.*;
-import com.squareup.okhttp.HttpUrl;
 import lombok.var;
 import org.springframework.stereotype.Service;
 
-import java.net.URL;
 import java.util.*;
 
 @Service
@@ -42,9 +41,11 @@ public class LobbyService {
     public ConnectionData initLobby(String lobbyName, String playerName, int chooseColor) throws Exception {
         if(gameServerService.isGameServerAvailable()) {
             if(!lobbyExists(lobbyName)) {
-                var gameServer = gameServerService.getAvailableGameServer();
                 var lobby = createLobby(lobbyName, playerName, chooseColor);
-                return new ConnectionData(lobby.getLobbyUuid().toString(), lobby.getPlayerOne().getPlayerUUID().toString());
+                var gameData = gameDataService.createGameData(lobby, false);
+                var gameServer = gameServerService.getAvailableGameServer();
+
+                return new ConnectionData(gameServer.getGameServerUuid(), gameData.getGameUuid(), lobby.getPlayerOne().getPlayerUUID());
             } else {
                 throw new LobbyDoesNotExistsException(lobbyName);
             }
@@ -60,7 +61,9 @@ public class LobbyService {
                     if(playerNotAlreadyInLobby(lobbyUuid, playerName)) {
                         var gameServer = gameServerService.getAvailableGameServer();
                         var lobby = updateLobby(lobbyUuid, playerName);
-                        return new ConnectionData(lobby.getLobbyUuid().toString(), lobby.getPlayerTwo().getPlayerUUID().toString());
+                        var gameData = gameDataService.createGameData(lobby, true);
+
+                        return new ConnectionData(gameServer.getGameServerUuid(), gameData.getGameUuid(),lobby.getPlayerTwo().getPlayerUUID());
                     } else {
                         throw new PlayerIsAlreadyInLobbyException(lobbyUuid, playerName);
                     }
@@ -89,7 +92,6 @@ public class LobbyService {
         lobby.setPlayerTwo(player);
         lobby.setColorPlayerTwo(Color.getOtherColor(lobby.getColorPlayerOne()));
         lobbyDictionary.put(lobby.getLobbyUuid(), lobby);
-        gameDataService.createGameData(lobby, true);
         return lobby;
     }
 

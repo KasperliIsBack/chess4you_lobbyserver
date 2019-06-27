@@ -64,7 +64,7 @@ public class GameServiceTests {
     private List<GameServer> getListGameServerFull() {
         var tmpList = new ArrayList<GameServer>();
         var gameServerOne = new GameServer("GameServerOne", "localhost", 8080);
-        gameServerOne.setUUIDGameServer(UUID.randomUUID().toString());
+        gameServerOne.setGameServerUuid(UUID.randomUUID().toString());
         gameServerOne.setIsRunning(false);
         tmpList.add(gameServerOne);
         return tmpList;
@@ -74,7 +74,7 @@ public class GameServiceTests {
     private List<GameServer> getListGameServerEmpty() {
         var tmpList = new ArrayList<GameServer>();
         var gameServerOne = new GameServer("GameServerOne", "localhost", 8080);
-        gameServerOne.setUUIDGameServer(UUID.randomUUID().toString());
+        gameServerOne.setGameServerUuid(UUID.randomUUID().toString());
         gameServerOne.setIsRunning(true);
         tmpList.add(gameServerOne);
         return tmpList;

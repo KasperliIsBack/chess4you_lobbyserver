@@ -33,12 +33,12 @@ public class LobbyHandler {
     }
 
     public String initLobby(String lobbyName, String playerName, int chooseColor) throws Exception {
-        ConnectionData urlGameServer = lobbyService.initLobby(lobbyName, playerName, chooseColor);
-        return urlGameServer.toString();
+        ConnectionData connectionData = lobbyService.initLobby(lobbyName, playerName, chooseColor);
+        return gson.toJson(connectionData);
     }
 
     public String joinLobby(UUID lobbyUuid, String playerName) throws Exception {
-        ConnectionData urlGameServer = lobbyService.joinLobby(lobbyUuid, playerName);
-        return urlGameServer.toString();
+        ConnectionData connectionData = lobbyService.joinLobby(lobbyUuid, playerName);
+        return gson.toJson(connectionData);
     }
 }

@@ -2,6 +2,7 @@ package com.chess4you.lobbyserver.service;
 
 import com.chess4you.lobbyserver.data.gamedata.GameServer;
 import com.chess4you.lobbyserver.repository.IGameServerRepository;
+import lombok.var;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,13 +16,13 @@ public class GameServerService {
     @Autowired
     public GameServerService(IGameServerRepository gameRepository) {
         this.gameServerRepository = gameRepository;
-
+        updateDictionary();
     }
 
     private void updateDictionary() {
         gameDictionary = new Hashtable<>();
         for(GameServer game : this.gameServerRepository.findAll()) {
-            gameDictionary.put(game.getUUIDGameServer(), game);
+            gameDictionary.put(game.getGameServerUuid(), game);
         }
     }
 
@@ -29,7 +30,7 @@ public class GameServerService {
         updateDictionary();
         Optional<GameServer> game = Collections.list(gameDictionary.elements())
                 .stream()
-                .filter(tmpGame -> tmpGame.getIsRunning() == false)
+                .filter(tmpGame -> !tmpGame.getIsRunning())
                 .findFirst();
         return game.isPresent();
     }

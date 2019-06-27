@@ -9,6 +9,7 @@ import java.util.UUID;
 @Data
 public class Lobby {
     @NonNull private UUID lobbyUuid;
+    private String gameDataUuid;
     @NonNull private String lobbyName;
     @NonNull private Player playerOne;
     @NonNull private Color colorPlayerOne;
