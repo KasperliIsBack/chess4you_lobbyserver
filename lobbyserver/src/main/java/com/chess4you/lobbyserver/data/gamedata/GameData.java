@@ -3,17 +3,11 @@ package com.chess4you.lobbyserver.data.gamedata;
 import com.chess4you.lobbyserver.data.Player;
 import com.chess4you.lobbyserver.data.enums.Color;
 import com.google.gson.Gson;
-import lombok.Data;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import lombok.var;
+import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Document(collection = "gameData")
 @Data
@@ -30,20 +24,25 @@ public class GameData {
     @NonNull private Player currentPlayer;
     private int gamePeriodInMinute;
     private Date turnDate;
-    private Movement[] historyOfMovements;
-    private String mapPosPiece;
+    private Movement[] historyOfMovementData;
+    @Getter(AccessLevel.NONE) @Setter(AccessLevel.NONE) private Piece[] arrayOfPiece;
 
-    public void setMapPosPiece(Map<Position, Piece> mapPosPiece) {
-        List<Piece> listPiece = new ArrayList<>();
-        listPiece.addAll(mapPosPiece.values());
-        List<Position> listPosition = new ArrayList<>();
-        listPosition.addAll(mapPosPiece.keySet());
-
-        for (int index = 0; index < listPiece.size(); index++) {
-            var piece = listPiece.get(index);
-            piece.setPosition(listPosition.get(index));
-            listPiece.set(index, piece);
+    public Map<String, Piece> getMapPosPiece() {
+        var gson = new Gson();
+        Map<String, Piece> mapPosPiece = new HashMap<>();
+        if(arrayOfPiece != null) {
+            for (int index = 0; index < arrayOfPiece.length; index++) {
+                mapPosPiece.put(gson.toJson(arrayOfPiece[index].getPosition()), arrayOfPiece[index]);
+            }
         }
-        this.mapPosPiece = new Gson().toJson(listPiece);
+        return mapPosPiece;
+    }
+
+    public void setMapPosPiece(Map<String, Piece> mapPosPiece) {
+        List<Piece> tmpPieceList = new ArrayList<>(mapPosPiece.values());
+        arrayOfPiece = new Piece[tmpPieceList.size()];
+        for (int index = 0; index < tmpPieceList.size(); index++) {
+            arrayOfPiece[index] = tmpPieceList.get(index);
+        }
     }
 }
